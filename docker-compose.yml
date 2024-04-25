@@ -1,0 +1,30 @@
+version: latest
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgresql-server1
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: shah123
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  vmsamp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vm_cont1
+    environment:
+      POSTGRES_HOST: db  # Use the service name defined above as the hostname
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: shah123
+    depends_on:
+      - db
+
+volumes:
+  db_data:
